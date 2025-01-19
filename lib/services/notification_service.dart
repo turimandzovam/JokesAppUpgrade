@@ -6,7 +6,6 @@ class NotificationService {
   FlutterLocalNotificationsPlugin();
 
   Future<void> initialize() async {
-    // Иницијализација на локални нотификации
     const AndroidInitializationSettings initializationSettingsAndroid =
     AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -15,7 +14,6 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-    // Иницијализација на Firebase Messaging
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
         showNotification(
