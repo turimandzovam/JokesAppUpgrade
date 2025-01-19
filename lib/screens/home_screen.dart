@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/joke.dart';
 import '../services/api_services.dart';
+import '../services/notification_service.dart';
 import '../widgets/joke_card.dart';
 import 'joke_list_screen.dart';
 
@@ -13,12 +14,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ApiService apiService = ApiService();
+  final NotificationService notificationService = NotificationService();
   List<String> jokeTypes = [];
   List<Joke> favoriteJokes = [];
 
   @override
   void initState() {
     super.initState();
+    notificationService.initialize();
+    notificationService.showNotification('Шега на денот', 'Погледнете ја денешната шега!');
     _loadJokeTypes();
   }
 
@@ -26,8 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       jokeTypes = await apiService.getJokeTypes();
       setState(() {});
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   @override
@@ -49,7 +52,6 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ],
-
       ),
       body: jokeTypes.isEmpty
           ? const Center(child: CircularProgressIndicator())
@@ -68,7 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             onFavorite: () {
               setState(() {
-                favoriteJokes.add(Joke(type: jokeTypes[index], setup: 'Example Setup', punchline: 'Example Punchline'));
+                favoriteJokes.add(Joke(
+                  type: jokeTypes[index],
+                  setup: 'Example Setup',
+                  punchline: 'Example Punchline',
+                ));
               });
             },
           );
